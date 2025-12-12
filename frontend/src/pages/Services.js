@@ -1,73 +1,53 @@
-import React, { useState, useEffect } from 'react';
-import ServiceCard from '../components/ServiceCard';
-import { servicesAPI } from '../services/api';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import './Services.css';
 
 const Services = () => {
-  const [services, setServices] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [category, setCategory] = useState('');
+  const [selectedService, setSelectedService] = useState(null);
 
-  const categories = ['Hair', 'Nails', 'Makeup', 'Skincare', 'Massage', 'Other'];
+  const services = [
+    { id: 1, name: 'Brow Wax', price: 8 },
+    { id: 2, name: 'Brow Tint', price: 10 },
+    { id: 3, name: 'Brow Wax & Standard Tint', price: 15 },
+    { id: 4, name: 'Brow Wax & Hybrid Tint', description: 'Hybrid tint', price: 20 },
+    { id: 5, name: 'Brow Lamination', description: 'Includes Wax and Standard Tint', price: 30 },
+  ];
 
-  useEffect(() => {
-    const fetchServices = async () => {
-      setLoading(true);
-      try {
-        const response = await servicesAPI.getAll(category || undefined);
-        setServices(response.data);
-      } catch (error) {
-        console.error('Error fetching services:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchServices();
-  }, [category]);
+  const handleSelect = (service) => {
+    setSelectedService(selectedService?.id === service.id ? null : service);
+  };
 
   return (
     <div className="services-page">
       <div className="page-header">
         <div className="container">
           <h1>Our Services</h1>
-          <p>Browse our wide range of beauty services</p>
+          <p>Choose a service to book your appointment</p>
         </div>
       </div>
 
       <div className="container">
-        <div className="filters">
-          <button
-            className={`filter-btn ${category === '' ? 'active' : ''}`}
-            onClick={() => setCategory('')}
-          >
-            All
-          </button>
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              className={`filter-btn ${category === cat ? 'active' : ''}`}
-              onClick={() => setCategory(cat)}
+        <div className="services-list">
+          {services.map((service) => (
+            <div
+              key={service.id}
+              className={`service-item ${selectedService?.id === service.id ? 'selected' : ''}`}
+              onClick={() => handleSelect(service)}
             >
-              {cat}
-            </button>
+              <div className="service-info">
+                <h3>{service.name}</h3>
+                {service.description && <p className="service-description">{service.description}</p>}
+              </div>
+              <div className="service-price">£{service.price}</div>
+            </div>
           ))}
         </div>
 
-        {loading ? (
-          <div className="loading-container">
-            <div className="spinner"></div>
-          </div>
-        ) : services.length === 0 ? (
-          <div className="empty-state">
-            <h3>No services found</h3>
-            <p>Try selecting a different category</p>
-          </div>
-        ) : (
-          <div className="services-grid">
-            {services.map((service) => (
-              <ServiceCard key={service.id} service={service} />
-            ))}
+        {selectedService && (
+          <div className="booking-action">
+            <Link to={`/book?service=${selectedService.id}`} className="btn btn-primary btn-lg">
+              Book {selectedService.name} - £{selectedService.price}
+            </Link>
           </div>
         )}
       </div>

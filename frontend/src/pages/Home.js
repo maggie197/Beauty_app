@@ -36,15 +36,11 @@ const Home = () => {
         <div className="container hero-content">
           <h1>Book Your Beauty Appointment Today</h1>
           <p>
-            Discover top-rated beauty professionals and book your next appointment
-            with just a few clicks. Hair, nails, makeup, and more.
+            You deserve to feel gorgeous and become the best version of yourself!
           </p>
           <div className="hero-buttons">
             <Link to="/services" className="btn btn-primary btn-lg">
               Browse Services
-            </Link>
-            <Link to="/providers" className="btn btn-secondary btn-lg">
-              Find Providers
             </Link>
           </div>
         </div>
