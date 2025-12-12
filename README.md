@@ -1,6 +1,6 @@
 # Beauty Services Web App
 
-A full-stack web application for booking beauty services, connecting customers with service providers.
+A full-stack web application for booking beauty services, connecting customers with beauty services.
 
 ## Features
 
