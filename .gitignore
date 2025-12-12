@@ -1,0 +1,8 @@
+node_modules/
+DEPLOYMENT.md
+PLAN.md
+.env
+*.sqlite
+.DS_Store
+build/
+dist/
