@@ -1,0 +1,29 @@
+services:
+  backend:
+    build: ./backend
+    container_name: beauty-backend
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - backend-data:/app/data
+    networks:
+      - app-network
+
+  frontend:
+    build: ./frontend
+    container_name: beauty-frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  backend-data:

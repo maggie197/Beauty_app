@@ -1,0 +1,76 @@
+.provider-card {
+  text-align: center;
+  padding: 30px 20px;
+}
+
+.provider-image {
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 4px solid var(--primary-light);
+}
+
+.provider-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.provider-name {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: var(--text-primary);
+}
+
+.provider-specialties {
+  font-size: 14px;
+  color: var(--primary-color);
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.provider-rating {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 15px;
+}
+
+.provider-rating .stars {
+  font-size: 18px;
+}
+
+.star.full {
+  color: #ffc107;
+}
+
+.star.half {
+  color: #ffc107;
+}
+
+.star.empty {
+  color: #ddd;
+}
+
+.rating-text {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.provider-bio {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 20px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.provider-btn {
+  width: 100%;
+}
