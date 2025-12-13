@@ -29,14 +29,10 @@ const Navbar = () => {
 
         <div className={`navbar-menu ${menuOpen ? 'open' : ''}`}>
           <Link to="/services" className="nav-link">Services</Link>
-          <Link to="/providers" className="nav-link">Providers</Link>
 
           {user ? (
             <>
               <Link to="/appointments" className="nav-link">My Appointments</Link>
-              {user.role === 'provider' && (
-                <Link to="/provider/dashboard" className="nav-link">Dashboard</Link>
-              )}
               {user.role === 'admin' && (
                 <Link to="/admin" className="nav-link">Admin</Link>
               )}
