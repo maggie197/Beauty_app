@@ -108,6 +108,48 @@
   gap: 30px;
 }
 
+/* Home Services */
+.home-services {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 40px;
+}
+
+.home-service-category h3 {
+  font-size: 22px;
+  color: var(--text-primary);
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--primary-color);
+}
+
+.home-service-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.home-service-list li {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 16px;
+}
+
+.home-service-list li:last-child {
+  border-bottom: none;
+}
+
+.home-service-list li span:first-child {
+  color: var(--text-primary);
+}
+
+.home-service-list li span:last-child {
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
 .providers-section {
   background: var(--bg-light);
 }
@@ -171,6 +213,10 @@
 
   .services-grid,
   .providers-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .home-services {
     grid-template-columns: 1fr;
   }
 

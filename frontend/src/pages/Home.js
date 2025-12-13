@@ -99,7 +99,7 @@ const Home = () => {
       <section className="section providers-section">
         <div className="container">
           <div className="section-header">
-            <h2>Top Rated Providers</h2>
+            <h2>Top Beauty Products</h2>
             <Link to="/providers" className="view-all">View All →</Link>
           </div>
           {loading ? (
@@ -119,8 +119,8 @@ const Home = () => {
       {/* CTA Section */}
       <section className="cta-section">
         <div className="container">
-          <h2>Are You a Beauty Professional?</h2>
-          <p>Join our platform and reach more clients today</p>
+          <h2>Are You looking for a inspiration?</h2>
+          <p>Check our before and after pics</p>
           <Link to="/register" className="btn btn-primary btn-lg">
             Get Started
           </Link>

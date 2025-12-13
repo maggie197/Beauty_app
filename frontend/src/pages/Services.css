@@ -56,6 +56,109 @@
   padding-bottom: 60px;
 }
 
+/* Service Categories */
+.service-category {
+  margin-bottom: 40px;
+}
+
+.service-category h2 {
+  font-size: 24px;
+  color: var(--text-primary);
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--primary-color);
+}
+
+.service-subcategory {
+  font-size: 18px;
+  color: var(--text-secondary);
+  margin: 20px 0 10px 0;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Service List */
+.services-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.service-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background: var(--bg-white);
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.service-item:hover {
+  border-color: var(--primary-color);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.service-item:hover .service-description {
+  max-height: 100px;
+  opacity: 1;
+  margin-top: 8px;
+}
+
+.service-item.selected {
+  border-color: var(--primary-color);
+  background: linear-gradient(135deg, rgba(var(--primary-rgb), 0.05) 0%, rgba(var(--secondary-rgb), 0.05) 100%);
+}
+
+.service-info {
+  flex: 1;
+}
+
+.service-info h3 {
+  font-size: 18px;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.service-description {
+  font-size: 14px;
+  color: var(--text-secondary);
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  margin: 0;
+}
+
+.service-price {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--primary-color);
+  white-space: nowrap;
+  margin-left: 20px;
+}
+
+/* Booking Action */
+.booking-action {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20px;
+  background: var(--bg-white);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  z-index: 100;
+}
+
+.booking-action .btn {
+  min-width: 300px;
+}
+
 .empty-state {
   text-align: center;
   padding: 60px 20px;
