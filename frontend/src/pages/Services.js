@@ -49,6 +49,8 @@ const Services = () => {
   const antiWrinkleServices = [
     { id: 29, name: 'Female 1 Area', description: 'Crows Feet', price: 109 },
     { id: 30, name: 'Male 1 Area', description: 'Crows Feet', price: 129 },
+    { id: 31, name: 'Male 2 Areas', description: 'Frown lines, forehead and crows feet', price: 189 },
+    { id: 32, name: 'Male 3 Areas', description: 'Frown lines, forehead and crows feet', price: 209 }, 
   ];
 
   const antiWrinkleNote = "WHY IS THERE A DIFFERENCE PRICE?";
