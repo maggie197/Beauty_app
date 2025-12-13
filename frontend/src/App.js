@@ -11,6 +11,7 @@ import ProviderDetail from './pages/ProviderDetail';
 import BookAppointment from './pages/BookAppointment';
 import Appointments from './pages/Appointments';
 import ProviderDashboard from './pages/ProviderDashboard';
+import Admin from './pages/Admin';
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
               <Route path="/book/:serviceId" element={<BookAppointment />} />
               <Route path="/appointments" element={<Appointments />} />
               <Route path="/provider/dashboard" element={<ProviderDashboard />} />
+              <Route path="/admin" element={<Admin />} />
             </Routes>
           </main>
         </div>
