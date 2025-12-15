@@ -71,11 +71,25 @@ export const appointmentsAPI = {
 
 // Reviews API
 export const reviewsAPI = {
+  getAll: () => api.get('/reviews'),
   create: (data) => api.post('/reviews', data),
   getProviderReviews: (providerId, page = 1) =>
     api.get(`/reviews/provider/${providerId}`, { params: { page } }),
   getMy: () => api.get('/reviews/my'),
   delete: (id) => api.delete(`/reviews/${id}`)
+};
+
+// Products API
+export const productsAPI = {
+  getAll: () => api.get('/products'),
+  getById: (id) => api.get(`/products/${id}`),
+  create: (data) => api.post('/products', data, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  }),
+  update: (id, data) => api.put(`/products/${id}`, data, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  }),
+  delete: (id) => api.delete(`/products/${id}`)
 };
 
 export default api;
