@@ -10,13 +10,18 @@ const Navbar = () => {
 
   const handleLogout = () => {
     logout();
+    setMenuOpen(false);
     navigate('/');
+  };
+
+  const closeMenu = () => {
+    setMenuOpen(false);
   };
 
   return (
     <nav className="navbar">
       <div className="container navbar-content">
-        <Link to="/" className="navbar-logo">
+        <Link to="/" className="navbar-logo" onClick={closeMenu}>
           <span className="logo-icon">✨</span>
           <span className="logo-text">BeautyBook</span>
         </Link>
@@ -28,13 +33,15 @@ const Navbar = () => {
         </button>
 
         <div className={`navbar-menu ${menuOpen ? 'open' : ''}`}>
-          <Link to="/services" className="nav-link">Services</Link>
+          <Link to="/services" className="nav-link" onClick={closeMenu}>Services</Link>
+          <Link to="/reviews" className="nav-link" onClick={closeMenu}>Reviews</Link>
+          <Link to="/contact" className="nav-link" onClick={closeMenu}>Contact</Link>
 
           {user ? (
             <>
-              <Link to="/appointments" className="nav-link">My Appointments</Link>
+              <Link to="/appointments" className="nav-link" onClick={closeMenu}>My Appointments</Link>
               {user.role === 'admin' && (
-                <Link to="/admin" className="nav-link">Admin</Link>
+                <Link to="/admin" className="nav-link" onClick={closeMenu}>Admin</Link>
               )}
               <div className="nav-user">
                 <span className="user-name">{user.name}</span>
@@ -45,8 +52,8 @@ const Navbar = () => {
             </>
           ) : (
             <div className="nav-auth">
-              <Link to="/login" className="btn btn-secondary btn-sm">Login</Link>
-              <Link to="/register" className="btn btn-primary btn-sm">Sign Up</Link>
+              <Link to="/login" className="btn btn-secondary btn-sm" onClick={closeMenu}>Login</Link>
+              <Link to="/register" className="btn btn-primary btn-sm" onClick={closeMenu}>Sign Up</Link>
             </div>
           )}
         </div>
