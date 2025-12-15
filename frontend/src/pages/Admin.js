@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { servicesAPI, reviewsAPI } from '../services/api';
+import { servicesAPI, reviewsAPI, productsAPI } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import './Admin.css';
 
@@ -26,6 +26,19 @@ const Admin = () => {
   // Reviews state
   const [reviews, setReviews] = useState([]);
 
+  // Products state
+  const [products, setProducts] = useState([]);
+  const [editingProduct, setEditingProduct] = useState(null);
+  const [productForm, setProductForm] = useState({
+    name: '',
+    description: '',
+    price: '',
+    category: '',
+    stock: ''
+  });
+  const [productImage, setProductImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+
   useEffect(() => {
     if (!user || user.role !== 'admin') {
       navigate('/login');
@@ -40,11 +53,21 @@ const Admin = () => {
       const servicesRes = await servicesAPI.getAll();
       setServices(servicesRes.data);
       fetchReviews();
+      fetchProducts();
     } catch (error) {
       console.error('Error fetching data:', error);
       showMessage('error', 'Failed to load data');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchProducts = async () => {
+    try {
+      const response = await productsAPI.getAll();
+      setProducts(response.data);
+    } catch (error) {
+      console.error('Error fetching products:', error);
     }
   };
 
@@ -128,6 +151,86 @@ const Admin = () => {
     }
   };
 
+  // Product handlers
+  const handleProductSubmit = async (e) => {
+    e.preventDefault();
+    setSaving(true);
+    try {
+      const formData = new FormData();
+      formData.append('name', productForm.name);
+      formData.append('description', productForm.description);
+      formData.append('price', productForm.price);
+      formData.append('category', productForm.category);
+      formData.append('stock', productForm.stock);
+      if (productImage) {
+        formData.append('image', productImage);
+      }
+
+      if (editingProduct) {
+        await productsAPI.update(editingProduct.id, formData);
+        showMessage('success', 'Product updated successfully');
+      } else {
+        await productsAPI.create(formData);
+        showMessage('success', 'Product created successfully');
+      }
+      resetProductForm();
+      fetchProducts();
+    } catch (error) {
+      showMessage('error', error.response?.data?.error || 'Failed to save product');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setProductImage(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleEditProduct = (product) => {
+    setEditingProduct(product);
+    setProductForm({
+      name: product.name,
+      description: product.description || '',
+      price: product.price,
+      category: product.category || '',
+      stock: product.stock || ''
+    });
+    setProductImage(null);
+    setImagePreview(product.image ? `http://localhost:5000${product.image}` : null);
+  };
+
+  const handleDeleteProduct = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this product?')) return;
+    try {
+      await productsAPI.delete(id);
+      showMessage('success', 'Product deleted successfully');
+      fetchProducts();
+    } catch (error) {
+      showMessage('error', 'Failed to delete product');
+    }
+  };
+
+  const resetProductForm = () => {
+    setEditingProduct(null);
+    setProductForm({
+      name: '',
+      description: '',
+      price: '',
+      category: '',
+      stock: ''
+    });
+    setProductImage(null);
+    setImagePreview(null);
+  };
+
   if (!user || user.role !== 'admin') {
     return null;
   }
@@ -137,7 +240,7 @@ const Admin = () => {
       <div className="page-header">
         <div className="container">
           <h1>Admin Dashboard</h1>
-          <p>Manage services and reviews</p>
+          <p>Manage services, products and reviews</p>
         </div>
       </div>
 
@@ -152,6 +255,12 @@ const Admin = () => {
             onClick={() => setActiveTab('services')}
           >
             Services
+          </button>
+          <button
+            className={`tab-btn ${activeTab === 'products' ? 'active' : ''}`}
+            onClick={() => setActiveTab('products')}
+          >
+            Products
           </button>
           <button
             className={`tab-btn ${activeTab === 'reviews' ? 'active' : ''}`}
@@ -281,6 +390,171 @@ const Admin = () => {
                             <button
                               className="btn btn-sm btn-error"
                               onClick={() => handleDeleteService(service.id)}
+                            >
+                              Delete
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Products Tab */}
+          {activeTab === 'products' && (
+            <div className="tab-content">
+              <h2>{editingProduct ? 'Edit Product' : 'Add New Product'}</h2>
+
+              <form onSubmit={handleProductSubmit} className="product-form">
+                <div className="form-row">
+                  <div className="form-group">
+                    <label>Product Name *</label>
+                    <input
+                      type="text"
+                      value={productForm.name}
+                      onChange={(e) => setProductForm({ ...productForm, name: e.target.value })}
+                      placeholder="e.g., Brow Gel"
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Category</label>
+                    <input
+                      type="text"
+                      value={productForm.category}
+                      onChange={(e) => setProductForm({ ...productForm, category: e.target.value })}
+                      placeholder="e.g., Skincare, Haircare"
+                    />
+                  </div>
+                </div>
+
+                <div className="form-group">
+                  <label>Description</label>
+                  <textarea
+                    value={productForm.description}
+                    onChange={(e) => setProductForm({ ...productForm, description: e.target.value })}
+                    placeholder="Product description..."
+                    rows="3"
+                  />
+                </div>
+
+                <div className="form-row">
+                  <div className="form-group">
+                    <label>Price (£) *</label>
+                    <input
+                      type="number"
+                      value={productForm.price}
+                      onChange={(e) => setProductForm({ ...productForm, price: e.target.value })}
+                      placeholder="0.00"
+                      min="0"
+                      step="0.01"
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Stock Quantity</label>
+                    <input
+                      type="number"
+                      value={productForm.stock}
+                      onChange={(e) => setProductForm({ ...productForm, stock: e.target.value })}
+                      placeholder="0"
+                      min="0"
+                    />
+                  </div>
+                </div>
+
+                <div className="form-group">
+                  <label>Product Image</label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                    className="file-input"
+                  />
+                  {imagePreview && (
+                    <div className="image-preview">
+                      <img src={imagePreview} alt="Preview" />
+                      <button
+                        type="button"
+                        className="remove-image"
+                        onClick={() => { setProductImage(null); setImagePreview(null); }}
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  )}
+                </div>
+
+                <div className="form-actions">
+                  <button type="submit" className="btn btn-primary" disabled={saving}>
+                    {saving ? 'Saving...' : editingProduct ? 'Update Product' : 'Add Product'}
+                  </button>
+                  {editingProduct && (
+                    <button type="button" className="btn btn-secondary" onClick={resetProductForm}>
+                      Cancel
+                    </button>
+                  )}
+                </div>
+              </form>
+
+              <h2>All Products</h2>
+              {loading ? (
+                <div className="loading-container">
+                  <div className="spinner"></div>
+                </div>
+              ) : products.length === 0 ? (
+                <div className="empty-state">
+                  <p>No products found. Add your first product above.</p>
+                </div>
+              ) : (
+                <div className="products-table">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Image</th>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Price</th>
+                        <th>Stock</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {products.map((product) => (
+                        <tr key={product.id}>
+                          <td>
+                            {product.image ? (
+                              <img
+                                src={`http://localhost:5000${product.image}`}
+                                alt={product.name}
+                                className="product-thumbnail"
+                              />
+                            ) : (
+                              <div className="no-image">No image</div>
+                            )}
+                          </td>
+                          <td>
+                            <strong>{product.name}</strong>
+                            {product.description && (
+                              <small className="product-desc">{product.description}</small>
+                            )}
+                          </td>
+                          <td>{product.category || '-'}</td>
+                          <td>£{product.price}</td>
+                          <td>{product.stock || 0}</td>
+                          <td className="actions">
+                            <button
+                              className="btn btn-sm btn-secondary"
+                              onClick={() => handleEditProduct(product)}
+                            >
+                              Edit
+                            </button>
+                            <button
+                              className="btn btn-sm btn-error"
+                              onClick={() => handleDeleteProduct(product.id)}
                             >
                               Delete
                             </button>
